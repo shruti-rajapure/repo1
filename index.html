@@ -1,89 +1,397 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Coffee Corner</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Scoops & Smiles — Ice Cream Shop</title>
+  <meta name="description" content="A delightful, responsive ice cream shop website template. Built with vanilla HTML & CSS." />
+
   <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f8f5f2;
-      color: #3e2723;
+    /* ------------------
+       Base + Theme
+    -------------------*/
+    :root{
+      --bg: #fff7fb;
+      --card: #ffffff;
+      --ink: #2a2438;
+      --muted: #6b6b83;
+      --brand: #ff5da2; /* strawberry */
+      --brand-2: #5dd6ff; /* blue raspberry */
+      --accent: #69f0ae; /* mint */
+      --warning: #ffd166; /* mango */
+      --shadow: 0 10px 25px rgba(0,0,0,.08);
+      --round: 1.25rem;
+      --radius-xl: 2rem;
     }
 
-    /* Header */
-    header {
-      background-color: #3e2723;
-      color: white;
-      padding: 15px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    *{ box-sizing: border-box; }
+
+    html, body{
+      margin:0; padding:0; color:var(--ink); background: var(--bg);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      line-height:1.6;
     }
 
-    header h1 {
-      margin: 0;
+    a{ color:inherit; text-decoration:none; }
+    img{ max-width:100%; display:block; }
+
+    .container{ width:min(1120px, 92%); margin-inline:auto; }
+
+    /* ------------------
+       Header / Nav
+    -------------------*/
+    header{
+      position: sticky; top:0; z-index: 50; backdrop-filter:saturate(180%) blur(8px);
+      background: rgba(255, 247, 251, .7);
+      border-bottom: 1px solid rgba(0,0,0,.04);
+    }
+    .nav{
+      display:flex; align-items:center; justify-content:space-between; gap:1rem; padding: .8rem 0;
+    }
+    .brand{ display:flex; align-items:center; gap:.7rem; font-weight:800; letter-spacing:.3px; }
+    .logo{
+      width:42px; aspect-ratio:1; display:grid; place-items:center; border-radius: 14px;
+      background: radial-gradient(circle at 30% 30%, var(--brand), var(--brand-2));
+      box-shadow: var(--shadow);
+      color:white; font-weight:900;
+    }
+    .nav a{ font-weight:600; }
+
+    .nav-links{ display:flex; gap:1rem; align-items:center; }
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center; gap:.5rem; 
+      padding:.7rem 1rem; border-radius:999px; border:2px solid transparent; font-weight:700;
+      transition:.2s ease; cursor:pointer;
+    }
+    .btn-primary{ background:linear-gradient(135deg, var(--brand), var(--brand-2)); color:#fff; }
+    .btn-primary:hover{ filter:saturate(1.15) brightness(1.05); transform: translateY(-1px); }
+    .btn-ghost{ background: transparent; border-color: rgba(0,0,0,.08); }
+
+    /* ------------------
+       Hero
+    -------------------*/
+    .hero{ position:relative; padding: 4.5rem 0 3rem; overflow:hidden; }
+    .hero-grid{ display:grid; grid-template-columns: 1.1fr .9fr; gap:2rem; align-items:center; }
+
+    .tag{ display:inline-block; background:#fff; border:1px solid rgba(0,0,0,.05); padding:.35rem .7rem; border-radius:999px; font-weight:700; font-size:.9rem; }
+    .hero h1{ font-size: clamp(2.1rem, 4vw, 3.2rem); line-height:1.1; margin:.6rem 0 1rem; }
+    .hero p{ color:var(--muted); max-width: 52ch; }
+    .cta{ display:flex; gap:.8rem; flex-wrap:wrap; margin-top:1.2rem; }
+
+    .hero-art{
+      position:relative; aspect-ratio: 4/3; border-radius: var(--radius-xl); overflow:hidden; box-shadow: var(--shadow);
+      background: linear-gradient(135deg, #ffeaf3, #e6fbff);
+    }
+    .hero-art img.cover{ width:100%; height:100%; object-fit:cover; opacity:.9; mix-blend: multiply; }
+    .sprinkles{
+      position:absolute; inset:0; pointer-events:none; background-image: radial-gradient(var(--brand) 2px, transparent 2px), radial-gradient(var(--brand-2) 2px, transparent 2px), radial-gradient(var(--warning) 2px, transparent 2px), radial-gradient(var(--accent) 2px, transparent 2px);
+      background-size: 24px 24px, 28px 28px, 22px 22px, 30px 30px;
+      background-position: 12px 8px, 6px 18px, 22px 12px, 2px 2px;
+      opacity:.25;
     }
 
-    nav a {
-      color: white;
-      margin-left: 20px;
-      text-decoration: none;
-      font-weight: bold;
-    }
+    /* ------------------
+       Section helpers
+    -------------------*/
+    section{ padding: 3.5rem 0; }
+    .section-title{ font-size: clamp(1.6rem, 3.2vw, 2.2rem); margin:0 0 .8rem; }
+    .section-lead{ color:var(--muted); margin:0 0 2rem; }
 
-    nav a:hover {
-      text-decoration: underline;
+    /* ------------------
+       Flavors grid
+    -------------------*/
+    .grid{ display:grid; grid-template-columns: repeat(12, 1fr); gap:1rem; }
+    .flavor{
+      grid-column: span 4; background:var(--card); border-radius: var(--round); padding:1rem; box-shadow: var(--shadow);
+      display:flex; flex-direction:column; gap:.8rem; transition: .2s ease;
     }
+    .flavor:hover{ transform: translateY(-3px); }
+    .flavor img{ border-radius: calc(var(--round) - .3rem); height: 180px; object-fit:cover; }
+    .chip{ display:inline-block; padding:.25rem .55rem; border-radius:999px; font-size:.8rem; background:#f4f4f8; }
+    .price{ margin-left:auto; font-weight:800; }
 
-    /* Hero Section */
-    .hero {
-      background: url("https://i.ibb.co/fvY1R2z/coffee-hero.jpg") no-repeat center/cover;
-      height: 350px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      color: white;
+    /* ------------------
+       Promo banner
+    -------------------*/
+    .promo{ background: linear-gradient(135deg, #ffe3ef, #ddf8ff); border:1px solid rgba(0,0,0,.05); border-radius: var(--radius-xl); padding:1.2rem 1rem; display:flex; align-items:center; justify-content:space-between; gap:1rem; box-shadow: var(--shadow); }
+    .promo strong{ font-size:1.1rem; }
+
+    /* ------------------
+       Menu / Pricing
+    -------------------*/
+    .menu{ background:#fff; border-radius: var(--radius-xl); box-shadow: var(--shadow); padding:1.2rem; }
+    .menu-row{ display:grid; grid-template-columns: 1fr auto; align-items:center; gap:.6rem; padding:.7rem 1rem; border-bottom:1px dashed rgba(0,0,0,.08); }
+    .menu-row:last-child{ border-bottom:0; }
+    .menu small{ color:var(--muted); }
+
+    /* ------------------
+       Gallery
+    -------------------*/
+    .gallery{ display:grid; grid-template-columns: repeat(3, 1fr); gap:1rem; }
+    .gallery img{ height: 220px; width:100%; object-fit:cover; border-radius: var(--round); box-shadow: var(--shadow); }
+
+    /* ------------------
+       About & Testimonials
+    -------------------*/
+    .about{ display:grid; grid-template-columns: 1.2fr .8fr; gap:2rem; align-items:center; }
+    .card{ background:var(--card); padding:1.2rem; border-radius: var(--round); box-shadow: var(--shadow); }
+    .quote{
+      font-size:1.05rem; font-weight:600; position:relative; padding-left:2.2rem;
     }
+    .quote::before{ content:"\201C"; position:absolute; left:.5rem; top:-.6rem; font-size:3rem; color:var(--brand); opacity:.25; }
 
-    .hero h2 {
-      font-size: 40px;
-      background: rgba(0,0,0,0.5);
-      padding: 15px 25px;
-      border-radius: 8px;
+    /* ------------------
+       Contact
+    -------------------*/
+    form{ display:grid; gap:.8rem; }
+    input, textarea{ width:100%; border:1px solid rgba(0,0,0,.08); background:#fff; border-radius:.9rem; padding:.8rem 1rem; font:inherit; }
+    textarea{ min-height:120px; }
+
+    /* ------------------
+       Footer
+    -------------------*/
+    footer{ padding:2rem 0 3rem; color:var(--muted); }
+    .footer-grid{ display:grid; grid-template-columns: 1.2fr .8fr; gap:2rem; }
+
+    /* ------------------
+       Responsive
+    -------------------*/
+    @media (max-width: 900px){
+      .hero-grid, .about, .footer-grid{ grid-template-columns: 1fr; }
+      .gallery{ grid-template-columns: 1fr 1fr; }
+      .flavor{ grid-column: span 6; }
     }
-
-    /* Menu Section */
-    section {
-      padding: 40px 20px;
+    @media (max-width: 600px){
+      .nav-links{ display:none; }
+      .gallery{ grid-template-columns: 1fr; }
+      .flavor{ grid-column: span 12; }
     }
+  </style>
+</head>
+<body>
+  <!-- Header / Navigation -->
+  <header>
+    <div class="container nav" role="navigation" aria-label="Primary">
+      <a href="#" class="brand" aria-label="Scoops & Smiles Home">
+        <span class="logo" aria-hidden="true">🍨</span>
+        <span>Scoops & Smiles</span>
+      </a>
+      <nav class="nav-links">
+        <a href="#flavors">Flavors</a>
+        <a href="#menu">Menu</a>
+        <a href="#about">About</a>
+        <a href="#contact" class="btn btn-ghost">Contact</a>
+        <a href="#order" class="btn btn-primary">Order Now</a>
+      </nav>
+    </div>
+  </header>
 
-    section h2 {
-      text-align: center;
-      margin-bottom: 30px;
-      font-size: 28px;
-      color: #4e342e;
-    }
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <span class="tag">Handcrafted daily • 100% natural</span>
+        <h1>Ice cream that melts hearts, not standards.</h1>
+        <p>From classic vanilla bean to playful blueberry cheesecake, we churn small batches with real fruit, organic milk, and a sprinkle of joy.</p>
+        <div class="cta">
+          <a href="#flavors" class="btn btn-primary">Explore Flavors</a>
+          <a href="#menu" class="btn btn-ghost">See Menu</a>
+        </div>
+      </div>
 
-    .menu-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 20px;
-    }
+      <div class="hero-art" aria-hidden="true">
+        <img class="cover" src="https://images.unsplash.com/photo-1551024709-8f23befc6cf7?q=80&w=1600&auto=format&fit=crop" alt="Scoops of colorful ice cream in cones" />
+        <div class="sprinkles"></div>
+      </div>
+    </div>
+  </section>
 
-    .menu-item {
-      background: white;
-      border-radius: 8px;
-      padding: 15px;
-      text-align: center;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      transition: transform 0.2s;
-    }
+  <!-- Flavors -->
+  <section id="flavors">
+    <div class="container">
+      <h2 class="section-title">This Week's Flavors</h2>
+      <p class="section-lead">New small-batch creations every Friday. Ask about vegan and sugar-free options.</p>
 
-    .menu-item:hover {
-      transform: scale(1.05);
-    }
+      <div class="grid">
+        <!-- Flavor card -->
+        <article class="flavor" aria-label="Strawberry Bliss">
+          <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?q=80&w=1600&auto=format&fit=crop" alt="Strawberry ice cream with fresh berries" />
+          <div style="display:flex; align-items:center; gap:.6rem;">
+            <span class="chip">Bestseller</span>
+            <span class="chip">Gluten-free</span>
+            <span class="price">₹120</span>
+          </div>
+          <h3 style="margin:.2rem 0 0;">Strawberry Bliss</h3>
+          <p style="margin:.2rem 0 0; color:var(--muted);">Fresh farm berries, cream, and a whisper of vanilla.</p>
+        </article>
 
-    .menu-item img
+        <article class="flavor" aria-label="Triple Chocolate Fudge">
+          <img src="https://images.unsplash.com/photo-1497051788611-2c64812349c2?q=80&w=1600&auto=format&fit=crop" alt="Chocolate ice cream scoops" />
+          <div style="display:flex; align-items:center; gap:.6rem;">
+            <span class="chip">Rich</span>
+            <span class="chip">Contains nuts</span>
+            <span class="price">₹130</span>
+          </div>
+          <h3 style="margin:.2rem 0 0;">Triple Chocolate Fudge</h3>
+          <p style="margin:.2rem 0 0; color:var(--muted);">Cocoa swirl, brownie chunks, and fudge ripple.</p>
+        </article>
+
+        <article class="flavor" aria-label="Mint Choco Chip">
+          <img src="https://images.unsplash.com/photo-1589712186489-b0b7378b51e4?q=80&w=1600&auto=format&fit=crop" alt="Green mint choco chip scoops" />
+          <div style="display:flex; align-items:center; gap:.6rem;">
+            <span class="chip">Refreshing</span>
+            <span class="chip">Vegetarian</span>
+            <span class="price">₹120</span>
+          </div>
+          <h3 style="margin:.2rem 0 0;">Mint Choco Chip</h3>
+          <p style="margin:.2rem 0 0; color:var(--muted);">Garden mint with dark chocolate shards.</p>
+        </article>
+
+        <article class="flavor" aria-label="Mango Lassi">
+          <img src="https://images.unsplash.com/photo-1517817748498-86e0b2f6ef13?q=80&w=1600&auto=format&fit=crop" alt="Mango ice cream with mango slices" />
+          <div style="display:flex; align-items:center; gap:.6rem;">
+            <span class="chip">Seasonal</span>
+            <span class="chip">Real Alphonso</span>
+            <span class="price">₹140</span>
+          </div>
+          <h3 style="margin:.2rem 0 0;">Mango Lassi</h3>
+          <p style="margin:.2rem 0 0; color:var(--muted);">Alphonso mangoes, yogurt, cardamom kiss.</p>
+        </article>
+
+        <article class="flavor" aria-label="Blueberry Cheesecake">
+          <img src="https://images.unsplash.com/photo-1499636136210-6f4ee915583e?q=80&w=1600&auto=format&fit=crop" alt="Blueberry cheesecake ice cream" />
+          <div style="display:flex; align-items:center; gap:.6rem;">
+            <span class="chip">Creamy</span>
+            <span class="chip">Eggless</span>
+            <span class="price">₹150</span>
+          </div>
+          <h3 style="margin:.2rem 0 0;">Blueberry Cheesecake</h3>
+          <p style="margin:.2rem 0 0; color:var(--muted);">Blueberry compote & buttery biscuit bits.</p>
+        </article>
+
+        <article class="flavor" aria-label="Pista Kulfi">
+          <img src="https://images.unsplash.com/photo-1625944527733-921b92b1b46d?q=80&w=1600&auto=format&fit=crop" alt="Pistachio kulfi on sticks" />
+          <div style="display:flex; align-items:center; gap:.6rem;">
+            <span class="chip">Desi Classic</span>
+            <span class="chip">No eggs</span>
+            <span class="price">₹130</span>
+          </div>
+          <h3 style="margin:.2rem 0 0;">Pista Kulfi</h3>
+          <p style="margin:.2rem 0 0; color:var(--muted);">Slow-cooked milk with roasted pistachios.</p>
+        </article>
+      </div>
+
+      <div class="promo" style="margin-top:1.2rem;">
+        <div>
+          <strong>Summer Special:</strong> Buy 2 scoops, get a free waffle cone every weekend!
+        </div>
+        <a href="#order" class="btn btn-primary">Grab the Offer</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Menu / Pricing -->
+  <section id="menu">
+    <div class="container">
+      <h2 class="section-title">Menu & Pricing</h2>
+      <p class="section-lead">Fair prices, generous scoops. Customize with toppings like sprinkles, nuts, caramel, and hot fudge.</p>
+
+      <div class="menu">
+        <div class="menu-row"><div><strong>Single Scoop</strong> <small>— 100g</small></div><div><strong>₹90</strong></div></div>
+        <div class="menu-row"><div><strong>Double Scoop</strong> <small>— 180g</small></div><div><strong>₹160</strong></div></div>
+        <div class="menu-row"><div><strong>Waffle Cone</strong> <small>— house-made</small></div><div><strong>₹40</strong></div></div>
+        <div class="menu-row"><div><strong>Milkshake</strong> <small>— any flavor</small></div><div><strong>₹180</strong></div></div>
+        <div class="menu-row"><div><strong>Sundae</strong> <small>— 2 toppings</small></div><div><strong>₹200</strong></div></div>
+        <div class="menu-row"><div><strong>Family Tub</strong> <small>— 750ml</small></div><div><strong>₹450</strong></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery -->
+  <section id="gallery">
+    <div class="container">
+      <h2 class="section-title">Sweet Moments</h2>
+      <p class="section-lead">A peek into our scoops, cones, and smiles.</p>
+      <div class="gallery" aria-label="Photo gallery">
+        <img src="https://images.unsplash.com/photo-1549399542-7e3f8b79c341?q=80&w=1600&auto=format&fit=crop" alt="Assorted ice cream cones in a holder" />
+        <img src="https://images.unsplash.com/photo-1519861531473-9200262188bf?q=80&w=1600&auto=format&fit=crop" alt="Sundae with chocolate sauce" />
+        <img src="https://images.unsplash.com/photo-1488900128323-21503983a07e?q=80&w=1600&auto=format&fit=crop" alt="Colorful scoops in cups" />
+      </div>
+    </div>
+  </section>
+
+  <!-- About & Testimonials -->
+  <section id="about">
+    <div class="container about">
+      <div>
+        <h2 class="section-title">About Us</h2>
+        <p class="section-lead">We started as a weekend stall with a tiny hand-crank machine. Today, Scoops & Smiles crafts small-batch gelato and kulfi with local milk and seasonal fruit.</p>
+        <div class="card">
+          <p class="quote">“Best mango lassi ice cream in town — creamy, fragrant, and not too sweet. My kids beg for it every Sunday!”</p>
+          <p style="margin:.4rem 0 0; color:var(--muted);">— Aditi P., Verified Customer</p>
+        </div>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0">Store Hours</h3>
+        <p style="margin:.2rem 0 1rem; color:var(--muted);">Visit us or order online for pickup.</p>
+        <ul style="list-style:none; padding:0; margin:0; display:grid; gap:.3rem;">
+          <li><strong>Mon–Fri:</strong> 12:00 – 10:00 PM</li>
+          <li><strong>Sat–Sun:</strong> 11:00 – 11:00 PM</li>
+          <li><strong>Address:</strong> 22 Sweet Street, Your City</li>
+          <li><strong>Phone:</strong> +91 98765 43210</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact">
+    <div class="container">
+      <h2 class="section-title">Get in Touch</h2>
+      <p class="section-lead">Have a catering request or custom cake idea? Send us a message.</p>
+      <div class="grid">
+        <div class="card" style="grid-column: span 7;">
+          <form onsubmit="event.preventDefault(); alert('Thanks! We\'ll get back to you soon.');">
+            <input type="text" name="name" placeholder="Your name" aria-label="Your name" required />
+            <input type="email" name="email" placeholder="Email address" aria-label="Email address" required />
+            <textarea name="message" placeholder="Your message" aria-label="Your message" required></textarea>
+            <button class="btn btn-primary" type="submit">Send Message</button>
+          </form>
+        </div>
+        <div class="card" style="grid-column: span 5;">
+          <h3 style="margin-top:0">Catering & Events</h3>
+          <p style="color:var(--muted);">We do birthday parties, weddings, and corporate events. Choose a custom menu and live waffle cone station.</p>
+          <ul style="margin:0; padding-left:1.1rem;">
+            <li>Vegan & sugar-free options</li>
+            <li>On-site freezer cart</li>
+            <li>Theme-based décor</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container footer-grid">
+      <div>
+        <strong>Scoops & Smiles</strong>
+        <p style="margin:.2rem 0 0;">© <span id="y"></span> All rights reserved. Made with 🍦 and good vibes.</p>
+      </div>
+      <div style="text-align:right;">
+        <a href="#" class="btn btn-ghost">Privacy</a>
+        <a href="#" class="btn btn-ghost">Terms</a>
+        <a href="#top" class="btn btn-primary">Back to Top</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Update year in footer
+    document.getElementById('y').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
+
+      
+      
